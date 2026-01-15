@@ -16,24 +16,24 @@ export async function fetchFromTMDB(path: string) {
 }
 
 // Tận dụng hàm fetchFromTMDB cho Search để code ngắn gọn hơn
-export const searchMovies = async (keyword: string) => {
-  return fetchFromTMDB(`/search/movie?query=${encodeURIComponent(keyword)}&language=en-US&page=1`);
+export const searchMovies = async (keyword: string, page: number = 1) => {
+  return fetchFromTMDB(`/search/movie?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
 };
 
-export const searchTvShows = async (keyword: string) => {
-  return fetchFromTMDB(`/search/tv?query=${encodeURIComponent(keyword)}&language=en-US&page=1`);
+export const searchTvShows = async (keyword: string, page: number = 1) => {
+  return fetchFromTMDB(`/search/tv?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
 };
 
-export async function getTrending() {
-  return fetchFromTMDB("/trending/movie/day");
+export async function getTrending(page: number = 1) {
+  return fetchFromTMDB(`/trending/movie/day?page=${page}`);
 }
 
 export async function getTopRatedMovies() {
   return fetchFromTMDB("/movie/top_rated");
 }
 
-export async function getTrendingTv() {
-  return fetchFromTMDB("/trending/tv/week");
+export async function getTrendingTv(page: number = 1) {
+  return fetchFromTMDB(`/trending/tv/week?page=${page}`);
 }
 
 export async function getTopRatedTv() {

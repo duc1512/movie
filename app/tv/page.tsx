@@ -1,5 +1,6 @@
 import { getTrendingTv, getTopRatedTv, getTopRatedMovies, getTrending, searchMovies, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
+import TVGrid from "../../src/components/TVGrid";
 import { Movie } from "../../src/types/movie";
 
 interface MoviePageProps {
@@ -70,6 +71,7 @@ export default async function MoviePage({ searchParams }: MoviePageProps) {
         type="text"
         name="keyword"
         placeholder="Enter keyword"
+        defaultValue={keyword || ""}
         className="!flex-1 !bg-transparent !text-white !placeholder-gray-500 !outline-none !text-lg !font-light !border-none !px-6"
       />
       
@@ -101,22 +103,7 @@ export default async function MoviePage({ searchParams }: MoviePageProps) {
 </div>
 
           {/* Grid TV Shows */}
-          <div className="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-6 gap-6 md:gap-8">
-            {uniqueTvShows.map((tvShow) => (
-              <MovieCard
-                key={tvShow.id}
-                item={tvShow}
-                mediaType="tv"
-              />
-            ))}
-          </div>
-
-          {/* Nút Watch More */}
-          <div className="relative py-20 flex justify-center">
-             <button className="!px-12 !py-3 !bg-transparent !border-2 !border-red-600 !text-white !rounded-full !font-bold !text-lg hover:!bg-red-600 !transition-all !duration-300 !cursor-pointer">
-               Watch more
-             </button>
-          </div>
+          <TVGrid initialMovies={uniqueTvShows} initialPage={2} keyword={keyword} />
 
         </div>
       </div>
