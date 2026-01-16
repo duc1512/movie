@@ -3,7 +3,7 @@
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
 
-export default function MovieSearch() {
+export default function TVSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
@@ -13,7 +13,7 @@ export default function MovieSearch() {
 
   const handleSearch = () => {
     if (keyword.trim()) {
-      // Đẩy keyword lên URL -> MoviePage sẽ tự reload dữ liệu
+      // Đẩy keyword lên URL - client component sẽ tự động re-render với useEffect
       router.push(`/tv?keyword=${encodeURIComponent(keyword)}`);
     } else {
       // Nếu xóa trắng thì về trang gốc
@@ -39,7 +39,7 @@ export default function MovieSearch() {
             value={keyword}
             onChange={(e) => setKeyword(e.target.value)}
             onKeyDown={handleKeyDown}
-            placeholder="Enter keyword"
+            placeholder="Search TV series..."
             className="!flex-1 !bg-transparent !text-white !placeholder-gray-500 !outline-none !text-lg !font-light !border-none !px-6"
           />
 

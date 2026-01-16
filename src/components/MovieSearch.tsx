@@ -13,7 +13,7 @@ export default function MovieSearch() {
 
   const handleSearch = () => {
     if (keyword.trim()) {
-      // Đẩy keyword lên URL -> MoviePage sẽ tự reload dữ liệu
+      // Đẩy keyword lên URL - client component sẽ tự động re-render với useEffect
       router.push(`/movie?keyword=${encodeURIComponent(keyword)}`);
     } else {
       // Nếu xóa trắng thì về trang gốc

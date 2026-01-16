@@ -54,7 +54,7 @@ export default function TVGrid({ initialMovies, initialPage, keyword }: { initia
           disabled={loading}
           className="!px-12 !py-3 !bg-transparent !border-2 !border-red-600 !text-white !rounded-full !font-bold !text-lg hover:!bg-red-600 !transition-all !duration-300 !cursor-pointer disabled:!opacity-50"
         >
-          {loading ? "" : "Watch more"}
+          {loading ? "Loading..." : "Watch more"}
         </button>
       </div>
     </>

@@ -1,42 +1,57 @@
-import MovieGrid from "@/src/components/MovieGrid";
-import { getTrendingTv, getTopRatedTv, getTopRatedMovies, getTrending, searchMovies, searchTvShows } from "../../src/api/Api";
+"use client";
+
+import { useState, useEffect } from "react";
+import { useSearchParams } from "next/navigation";
+import { getTrendingTv, getTopRatedTv, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
-import TVGrid from "../../src/components/TVGrid";
+import TVGrid from "@/src/components/TVGrid";
+import TVSearch from "@/src/components/TVSearch";
 import { Movie } from "../../src/types/movie";
 
-interface MoviePageProps {
-  searchParams: Promise<{
-    keyword?: string;
-  }>;
-}
+export default function TVPage() {
+  const searchParams = useSearchParams();
+  const keyword = searchParams.get("keyword");
+  const [tvShows, setTvShows] = useState<Movie[]>([]);
+  const [loading, setLoading] = useState(true);
 
-export default async function MoviePage({ searchParams }: MoviePageProps) {
-  // Await searchParams vì nó là Promise trong Next.js 13+
-  const resolvedSearchParams = await searchParams;
-  const keyword = resolvedSearchParams?.keyword;
-  
-  let tvShowsDisplay: Movie[] = [];
+  useEffect(() => {
+    const fetchTvShows = async () => {
+      setLoading(true);
+      let tvShowsDisplay: Movie[] = [];
 
-  // 2. LOGIC TÌM KIẾM
-  if (keyword) {
-    // Nếu có keyword -> Gọi API Search TV Shows
-    const searchData = await searchTvShows(keyword);
-    tvShowsDisplay = searchData.results;
-  } else {
-    // Nếu KHÔNG có keyword -> Gọi API Trending TV & Top Rated TV
-    const [trendingTvData, topRatedTvData] = await Promise.all([
-      getTrendingTv(),
-      getTopRatedTv(),
-    ]);
-    tvShowsDisplay = [...trendingTvData.results, ...topRatedTvData.results];
+      if (keyword) {
+        // Nếu có keyword -> Gọi API Search TV Shows
+        const searchData = await searchTvShows(keyword);
+        tvShowsDisplay = searchData.results || [];
+      } else {
+        // Nếu KHÔNG có keyword -> Gọi API Trending TV & Top Rated TV
+        const [trendingTvData, topRatedTvData] = await Promise.all([
+          getTrendingTv(),
+          getTopRatedTv(),
+        ]);
+        tvShowsDisplay = [...trendingTvData.results, ...topRatedTvData.results];
+      }
+
+      // Lọc trùng lặp
+      const uniqueTvShows = tvShowsDisplay.filter(
+        (tvShow: Movie, index: number, self: Movie[]) =>
+          index === self.findIndex((t) => t.id === tvShow.id)
+      );
+
+      setTvShows(uniqueTvShows);
+      setLoading(false);
+    };
+
+    fetchTvShows();
+  }, [keyword]);
+
+  if (loading) {
+    return (
+      <div className="min-h-screen bg-black/90 relative overflow-x-hidden flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    );
   }
-
-  // 3. Lọc trùng lặp (giữ nguyên logic của bạn)
-  const uniqueTvShows = tvShowsDisplay.filter(
-    (tvShow: Movie, index: number, self: Movie[]) =>
-      index === self.findIndex((t) => t.id === tvShow.id)
-  );
-
 
   return (
     <div className="min-h-screen bg-black/90 relative overflow-x-hidden">
@@ -60,57 +75,17 @@ export default async function MoviePage({ searchParams }: MoviePageProps) {
             TV Series
           </h1>
 
-          {/* Search Bar */}
-          <div className="flex justify-start mb-16">
-  <div className="relative w-full max-w-[600px]">
-    
-    {/* KHỐI CHA: Nền đen, bo tròn, chứa cả input và button */}
-    <form className="!flex !items-center !bg-black !rounded-full !p-1.5 !shadow-2xl !border !border-gray-800">
-      
-      {/* INPUT: Nền trong suốt (!bg-transparent) để hòa vào khối cha */}
-      <input
-        type="text"
-        name="keyword"
-        placeholder="Enter keyword"
-        defaultValue={keyword || ""}
-        className="!flex-1 !bg-transparent !text-white !placeholder-gray-500 !outline-none !text-lg !font-light !border-none !px-6"
-      />
-      
-      {/* BUTTON: Nằm gọn bên trong, có glow đỏ */}
-      <button 
-        type="submit"
-        className="
-          !shrink-0 
-          !bg-[#ff0000] 
-          !text-white 
-          !px-8 !py-2 
-          !rounded-full 
-          !font-bold 
-          !transition-all 
-          !shadow-[0_0_20px_rgba(255,0,0,0.6)] 
-          hover:!shadow-[0_0_30px_rgba(255,0,0,0.8)] 
-          hover:!bg-red-600 
-          active:!scale-95 
-          !border-none 
-          !cursor-pointer
-          !m-0
-        "
-      >
-        Search
-      </button>
-      
-    </form>
-  </div>
-</div>
+          {/* Search Bar - dùng TVSearch component */}
+          <TVSearch />
 
           {/* Grid TV Shows */}
-         {uniqueTvShows.length > 0 ? (
-                <MovieGrid initialMovies={uniqueTvShows} initialPage={2} keyword={keyword} />
-              ) : (
-               <div className="text-center text-gray-400 py-20 text-xl">
-                No Tv Series found based on your keyword.
-               </div>
-              )}
+         {tvShows.length > 0 ? (
+                 <TVGrid initialMovies={tvShows} initialPage={2} keyword={keyword || undefined} />
+               ) : (
+                <div className="text-center text-gray-400 py-20 text-xl">
+                 {keyword ? `No TV found for "${keyword}"` : "No TV available"}
+                </div>
+               )}
 
         </div>
       </div>
