@@ -8,9 +8,10 @@ export default function MovieGrid({ initialMovies, initialPage, keyword }: { ini
   const [movies, setMovies] = useState(initialMovies);
   const [page, setPage] = useState(initialPage);
   const [loading, setLoading] = useState(false);
+  const [hasMore, setHasMore] = useState(true);
 
   const loadMoreMovies = async () => {
-    if (loading) return;
+    if (loading || !hasMore) return;
     
     setLoading(true);
     const nextPage = page + 1;
@@ -29,10 +30,22 @@ export default function MovieGrid({ initialMovies, initialPage, keyword }: { ini
         throw new Error('Invalid API response');
       }
       
+      // Kiểm tra nếu có kết quả mới
+      if (data.results.length === 0) {
+        setHasMore(false);
+        return;
+      }
+      
       setMovies((prev) => [...prev, ...data.results]);
       setPage(nextPage);
+      
+      // Kiểm tra nếu đã hết trang (TMDB thường có tối đa 500 trang)
+      if (nextPage >= (data.total_pages || 500)) {
+        setHasMore(false);
+      }
     } catch (error) {
       console.error("Lỗi khi tải thêm phim:", error);
+      setHasMore(false);
     } finally {
       setLoading(false);
     }
@@ -47,16 +60,27 @@ export default function MovieGrid({ initialMovies, initialPage, keyword }: { ini
         ))}
       </div>
 
-      {/* Nút bấm */}
-      <div className="relative py-20 flex justify-center">
-        <button
-          onClick={loadMoreMovies}
-          disabled={loading}
-          className="!px-12 !py-3 !bg-transparent !border-2 !border-red-600 !text-white !rounded-full !font-bold !text-lg hover:!bg-red-600 !transition-all !duration-300 !cursor-pointer disabled:!opacity-50"
-        >
-          {loading ? "Loading..." : "Watch more"}
-        </button>
-      </div>
+      {/* Nút bấm - chỉ hiển thị khi còn dữ liệu */}
+      {hasMore && (
+        <div className="relative py-20 flex justify-center">
+          <button
+            onClick={loadMoreMovies}
+            disabled={loading}
+            className="!px-12 !py-3 !bg-transparent !border-2 !border-red-600 !text-white !rounded-full !font-bold !text-lg hover:!bg-red-600 !transition-all !duration-300 !cursor-pointer disabled:!opacity-50"
+          >
+            {loading ? "Loading..." : "Watch more"}
+          </button>
+        </div>
+      )}
+      
+      {/* Thông báo khi đã hết dữ liệu */}
+      {!hasMore && movies.length > 0 && (
+        <div className="relative py-10 flex justify-center">
+          <p className="text-gray-500 text-center">
+            {keyword ? `No more movies found for "${keyword}"` : "No more movies available"}
+          </p>
+        </div>
+      )}
     </>
   );
 }
