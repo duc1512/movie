@@ -1,14 +1,14 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getTrendingTv, getTopRatedTv, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
-import TVGrid from "../../src/components/TVGrid";
-import TVSearch from "../../src/components/TVSearch";
+import TVGrid from "@/src/components/TVGrid";
+import TVSearch from "@/src/components/TVSearch";
 import { Movie } from "../../src/types/movie";
 
-export default function TVPage() {
+function TVPageContent() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [tvShows, setTvShows] = useState<Movie[]>([]);
@@ -90,5 +90,17 @@ export default function TVPage() {
         </div>
       </div>
     </div>
+  );
+}
+
+export default function TVPage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black/90 relative overflow-x-hidden flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    }>
+      <TVPageContent />
+    </Suspense>
   );
 }
