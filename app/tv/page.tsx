@@ -1,3 +1,4 @@
+import MovieGrid from "@/src/components/MovieGrid";
 import { getTrendingTv, getTopRatedTv, getTopRatedMovies, getTrending, searchMovies, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
 import TVGrid from "../../src/components/TVGrid";
@@ -103,7 +104,13 @@ export default async function MoviePage({ searchParams }: MoviePageProps) {
 </div>
 
           {/* Grid TV Shows */}
-          <TVGrid initialMovies={uniqueTvShows} initialPage={2} keyword={keyword} />
+         {uniqueTvShows.length > 0 ? (
+                <MovieGrid initialMovies={uniqueTvShows} initialPage={2} keyword={keyword} />
+              ) : (
+               <div className="text-center text-gray-400 py-20 text-xl">
+                No Tv Series found based on your keyword.
+               </div>
+              )}
 
         </div>
       </div>
