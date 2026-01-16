@@ -1,13 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
+import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
 import { getTrending, getTopRatedMovies, searchMovies } from "../../src/api/Api";
-import MovieGrid from "@/src/components/MovieGrid";
+import MovieGrid from "../../src/components/MovieGrid";
 import MovieCard from "../../src/components/MovieCard";
 import MovieSearch from "../../src/components/MovieSearch";
 
-export default function MoviePage() {
+function MoviePageContent() {
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
   const [movies, setMovies] = useState([]);
@@ -83,5 +83,17 @@ export default function MoviePage() {
       </div>
      </div>
     </div>
+  );
+}
+
+export default function MoviePage() {
+  return (
+    <Suspense fallback={
+      <div className="min-h-screen bg-black/90 relative overflow-x-hidden flex items-center justify-center">
+        <div className="text-white text-xl">Loading...</div>
+      </div>
+    }>
+      <MoviePageContent />
+    </Suspense>
   );
 }
