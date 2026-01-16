@@ -1,4 +1,4 @@
-"use client"; // Bắt buộc dòng này để dùng hook
+"use client";
 
 import { useState } from "react";
 import { useRouter, useSearchParams } from "next/navigation";
@@ -7,16 +7,13 @@ export default function TVSearch() {
   const router = useRouter();
   const searchParams = useSearchParams();
   
-  // Lấy giá trị keyword hiện tại từ URL (nếu có) để điền vào ô input
   const initialKeyword = searchParams.get("keyword") || "";
   const [keyword, setKeyword] = useState(initialKeyword);
 
   const handleSearch = () => {
     if (keyword.trim()) {
-      // Đẩy keyword lên URL - client component sẽ tự động re-render với useEffect
       router.push(`/tv?keyword=${encodeURIComponent(keyword)}`);
     } else {
-      // Nếu xóa trắng thì về trang gốc
       router.push("/tv");
     }
   };
@@ -30,10 +27,7 @@ export default function TVSearch() {
   return (
     <div className="flex justify-start mb-16">
       <div className="relative w-full max-w-[600px]">
-        {/* KHỐI CHA */}
         <div className="!flex !items-center !bg-black !rounded-full !p-1.5 !shadow-2xl !border !border-gray-800">
-          
-          {/* INPUT */}
           <input
             type="text"
             value={keyword}
@@ -42,8 +36,6 @@ export default function TVSearch() {
             placeholder="Search TV series..."
             className="!flex-1 !bg-transparent !text-white !placeholder-gray-500 !outline-none !text-lg !font-light !border-none !px-6"
           />
-
-          {/* BUTTON */}
           <button
             onClick={handleSearch}
             className="

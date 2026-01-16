@@ -5,7 +5,7 @@ import { useSearchParams } from "next/navigation";
 import { getTrendingTv, getTopRatedTv, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
 import TVGrid from "../../src/components/TVGrid";
-import TVSearch from "../../src/components/TVSearch";
+import TVSearch from "../../src/components/TvSearch";
 import { Movie } from "../../src/types/movie";
 
 function TVPageContent() {
