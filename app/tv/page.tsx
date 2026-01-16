@@ -4,8 +4,8 @@ import { useState, useEffect } from "react";
 import { useSearchParams } from "next/navigation";
 import { getTrendingTv, getTopRatedTv, searchTvShows } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
-import TVGrid from "@/src/components/TVGrid";
-import TVSearch from "@/src/components/TVSearch";
+import TVGrid from "../../src/components/TVGrid";
+import TVSearch from "../../src/components/TVSearch";
 import { Movie } from "../../src/types/movie";
 
 export default function TVPage() {
