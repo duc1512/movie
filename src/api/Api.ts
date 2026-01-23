@@ -15,13 +15,9 @@ export async function fetchFromTMDB(path: string) {
   return res.json();
 }
 
-// Tận dụng hàm fetchFromTMDB cho Search để code ngắn gọn hơn
-export const searchMovies = async (keyword: string, page: number = 1) => {
-  return fetchFromTMDB(`/search/movie?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
-};
-
-export const searchTvShows = async (keyword: string, page: number = 1) => {
-  return fetchFromTMDB(`/search/tv?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
+// Unified search function for both movies and TV shows
+export const search = async (keyword: string, mediaType: "movie" | "tv", page: number = 1) => {
+  return fetchFromTMDB(`/search/${mediaType}?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
 };
 
 export async function getTrending(page: number = 1) {

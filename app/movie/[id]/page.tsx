@@ -154,7 +154,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
   <div className="max-w-[1440px] mx-auto"> {/* Giới hạn độ rộng tối đa để không bị quá loãng trên màn hình cực lớn */}
     <h2 className="text-3xl font-bold mb-10 flex items-center gap-3 text-white">
       <span className="w-2 h-10 bg-red-600 rounded-full shadow-[0_0_15px_rgba(220,38,38,0.5)]"></span>
-      Official Trailers
+       Trailers
     </h2>
 
     {/* Lọc và hiển thị danh sách trailer dọc */}
@@ -165,7 +165,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
           .map((trailer: any) => (
             <div key={trailer.id} className="w-full group">
               {/* Container Video chiếm hết trang */}
-              <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/5 transition-transform duration-500 group-hover:scale-[1.01]">
+              <div className="relative w-full aspect-video bg-black rounded-2xl overflow-hidden shadow-2xl border border-white/5 transition-transform duration-500 ">
                 <iframe
                   src={`https://www.youtube.com/embed/${trailer.key}?rel=0&showinfo=0`}
                   title={trailer.name}

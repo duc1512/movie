@@ -2,10 +2,10 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getTrendingTv, getTopRatedTv, searchTvShows } from "../../src/api/Api";
+import { getTrendingTv, getTopRatedTv, search } from "../../src/api/Api";
 import MovieCard from "../../src/components/MovieCard";
-import TVGrid from "../../src/components/TVGrid";
-import TVSearch from "../../src/components/TvSearch";
+import Grid from "../../src/components/Grid";
+import Search from "../../src/components/Search";
 import { Movie } from "../../src/types/movie";
 
 function TVPageContent() {
@@ -21,7 +21,7 @@ function TVPageContent() {
 
       if (keyword) {
         // Nếu có keyword -> Gọi API Search TV Shows
-        const searchData = await searchTvShows(keyword);
+        const searchData = await search(keyword, "tv");
         tvShowsDisplay = searchData.results || [];
       } else {
         // Nếu KHÔNG có keyword -> Gọi API Trending TV & Top Rated TV
@@ -32,7 +32,6 @@ function TVPageContent() {
         tvShowsDisplay = [...trendingTvData.results, ...topRatedTvData.results];
       }
 
-      // Lọc trùng lặp
       const uniqueTvShows = tvShowsDisplay.filter(
         (tvShow: Movie, index: number, self: Movie[]) =>
           index === self.findIndex((t) => t.id === tvShow.id)
@@ -76,11 +75,11 @@ function TVPageContent() {
           </h1>
 
           {/* Search Bar - dùng TVSearch component */}
-          <TVSearch />
+          <Search mediaType="tv" />
 
           {/* Grid TV Shows */}
          {tvShows.length > 0 ? (
-                 <TVGrid initialMovies={tvShows} initialPage={2} keyword={keyword || undefined} />
+                 <Grid initialMovies={tvShows} initialPage={2} keyword={keyword || undefined} mediaType="tv" />
                ) : (
                 <div className="text-center text-gray-400 py-20 text-xl">
                  {keyword ? `No TV found for "${keyword}"` : "No TV available"}

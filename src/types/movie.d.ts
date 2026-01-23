@@ -12,3 +12,10 @@ export interface Movie {
   media_type?: 'movie' | 'tv';
 
 }
+
+export interface GridProps {
+  initialMovies: any[];
+  initialPage: number;
+  keyword?: string;
+  mediaType: "movie" | "tv";
+}

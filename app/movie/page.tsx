@@ -2,10 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getTrending, getTopRatedMovies, searchMovies } from "../../src/api/Api";
-import MovieGrid from "../../src/components/MovieGrid";
-import MovieCard from "../../src/components/MovieCard";
-import MovieSearch from "../../src/components/MovieSearch";
+import { getTrending, getTopRatedMovies, search } from "../../src/api/Api";
+import Grid from "../../src/components/Grid";
+import Search from "../../src/components/Search";
 
 function MoviePageContent() {
   const searchParams = useSearchParams();
@@ -20,7 +19,7 @@ function MoviePageContent() {
 
       if (keyword) {
         // Nếu có keyword -> Gọi API Search
-        const searchData = await searchMovies(keyword);
+        const searchData = await search(keyword, "movie");
         moviesDisplay = searchData.results || [];
       } else {
         // Nếu KHÔNG có keyword -> Gọi API Trending & Top Rated cũ
@@ -70,11 +69,11 @@ function MoviePageContent() {
        </h1>
 
        {/* NHÚNG COMPONENT TÌM KIẾM VÀO ĐÂY */}
-       <MovieSearch />
+       <Search mediaType="movie" />
 
        {/* Grid Phim */}
        {movies.length > 0 ? (
-         <MovieGrid initialMovies={movies} initialPage={2} keyword={keyword || undefined} />
+         <Grid initialMovies={movies} initialPage={2} keyword={keyword || undefined} mediaType="movie" />
        ) : (
         <div className="text-center text-gray-400 py-20 text-xl">
          {keyword ? `No movies found for "${keyword}"` : "No movies available"}
