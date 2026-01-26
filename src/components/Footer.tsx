@@ -2,7 +2,6 @@
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image';
-import { useLoadingStore } from "../store/useLoadingStore"; 
 
 const FOOTER_LINKS_DATA = [
     { 
@@ -33,15 +32,10 @@ const FOOTER_LINKS_DATA = [
 ];
 
 const Footer = () => {
-    const { isLoading } = useLoadingStore();
     
     const handleScrollToTop = () => {
         window.scrollTo(0, 0);
     };
-
-    if (isLoading) {
-        return null; // ẩn Footer khi đang loading
-    }
 
     return (
        
@@ -125,3 +119,5 @@ const Footer = () => {
 };
 
 export default Footer;
+
+

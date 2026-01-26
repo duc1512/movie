@@ -2,93 +2,65 @@
 
 import { useState, useEffect, Suspense, use } from "react";
 import { useSearchParams, notFound } from "next/navigation";
-// Import các hàm API mới từ file Api.ts của bạn
 import { getTrending, getTopRatedMovies, getTrendingTv, getTopRatedTv, search } from "../../api/Api";
 import Grid from "../../components/Grid";
 import Search from "../../components/Search";
-import { useLoadingStore } from "../../store/useLoadingStore";
+import { useSearchMovies, useTopRatedMovies, useTopRatedTv, useTrendingMovies, useTrendingTv } from "@/hooks/useMovies";
 
 function CategoryPageContent({ params }: { params: Promise<{ type: string }> }) {
-  // 1. Lấy type từ params (movie hoặc tv)
   const { type } = use(params);
 
-  // Kiểm tra route hợp lệ
   if (type !== "movie" && type !== "tv") {
     notFound();
   }
 
   const searchParams = useSearchParams();
   const keyword = searchParams.get("keyword");
-  const [items, setItems] = useState([]);
-  const { isLoading, setIsLoading } = useLoadingStore();
+  const trendingMovies = useTrendingMovies();
+  const topRatedMovies = useTopRatedMovies();
+  const trendingTv = useTrendingTv();
+  const topRatedTv = useTopRatedTv();
+  const searchResult = useSearchMovies(keyword || '', type);
 
-  useEffect(() => {
-    const fetchData = async () => {
-      setIsLoading(true);
-      let dataDisplay = [];
-
-      try {
-        if (keyword) {
-          // Nếu có keyword -> Gọi API Search chung
-          const searchData = await search(keyword, type);
-          dataDisplay = searchData.results || [];
-        } else {
-          // Nếu KHÔNG có keyword -> Gọi API tương ứng với type
-          const [trendingData, topRatedData] = await Promise.all([
-            type === "movie" ? getTrending() : getTrendingTv(),
-            type === "movie" ? getTopRatedMovies() : getTopRatedTv(),
-          ]);
-          dataDisplay = [...(trendingData.results || []), ...(topRatedData.results || [])];
-        }
-
-        // Lọc trùng lặp dựa trên id
-        const uniqueItems = dataDisplay.filter(
-          (item: any, index: number, self: any[]) =>
-            index === self.findIndex((m) => m.id === item.id)
-        );
-
-        setItems(uniqueItems);
-      } catch (error) {
-        console.error("Error fetching data:", error);
-      } finally {
-        setIsLoading(false);
-      }
-    };
-
-    fetchData();
-  }, [keyword, type, setIsLoading]);
-
-  // Tiêu đề hiển thị linh hoạt
   const displayTitle = type === "movie" ? "Movies" : "TV Series";
-
+  const isLoading = keyword 
+    ? searchResult.isLoading 
+    : type === 'movie' 
+      ? trendingMovies.isLoading || topRatedMovies.isLoading
+      : trendingTv.isLoading || topRatedTv.isLoading;
+  const data = keyword 
+    ? searchResult.data?.results || []
+    : type === 'movie'
+      ? [...(trendingMovies.data?.results || []), ...(topRatedMovies.data?.results || [])]
+      : [...(trendingTv.data?.results || []), ...(topRatedTv.data?.results || [])];
+  
+  const uniqueItems = data.filter(
+    (item: any, index: number, self: any[]) =>
+      index === self.findIndex((m) => m.id === item.id)
+  );
   if (isLoading) {
-    return null; // Không render gì khi đang loading
+    return null;
   }
 
   return (
     <div className="min-h-screen bg-black/90 relative overflow-x-hidden">
       
-      {/* 1. LỚP NỀN TRẮNG MỜ DẦN - GIỮ NGUYÊN CSS CŨ */}
       <div className="absolute top-0 left-0 right-0 h-[80px] pointer-events-none z-0">
         <div className="absolute inset-0 bg-gradient-to-b from-white via-white/40 via-white/10 to-transparent" />
       </div>
 
-      {/* 2. NỘI DUNG CHÍNH - GIỮ NGUYÊN CSS CŨ */}
       <div className="relative z-10 pt-2 px-4 md:px-8">
         <div className="max-w-[1440px] mx-auto">
           
-          {/* Tiêu đề thay đổi linh hoạt */}
           <h1 className="text-white text-4xl md:text-4xl font-bold text-center mb-16 tracking-tight drop-shadow-md">
             {displayTitle}
           </h1>
 
-          {/* NHÚNG COMPONENT TÌM KIẾM */}
           <Search mediaType={type} />
 
-          {/* Grid Phim/TV */}
-          {items.length > 0 ? (
+          {uniqueItems.length > 0 ? (
             <Grid 
-              initialMovies={items} 
+              initialMovies={uniqueItems} 
               initialPage={2} 
               keyword={keyword || undefined} 
               mediaType={type} 

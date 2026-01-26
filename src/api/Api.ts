@@ -2,7 +2,6 @@ const API_KEY = process.env.NEXT_PUBLIC_TMDB_KEY;
 const BASE_URL = process.env.NEXT_PUBLIC_TMDB_BASE_URL;
 
 export async function fetchFromTMDB(path: string) {
-  // Kiểm tra nếu path đã có dấu '?' thì dùng '&', nếu chưa có thì dùng '?'
   const connector = path.includes("?") ? "&" : "?";
   const url = `${BASE_URL}${path}${connector}api_key=${API_KEY}`;
   
@@ -15,7 +14,6 @@ export async function fetchFromTMDB(path: string) {
   return res.json();
 }
 
-// Unified search function for both movies and TV shows
 export const search = async (keyword: string, mediaType: "movie" | "tv", page: number = 1) => {
   return fetchFromTMDB(`/search/${mediaType}?query=${encodeURIComponent(keyword)}&language=en-US&page=${page}`);
 };
