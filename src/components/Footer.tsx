@@ -1,4 +1,4 @@
-
+"use client";
 import React from 'react';
 import Link from 'next/link';
 import Image from 'next/image'; 
@@ -7,7 +7,7 @@ const FOOTER_LINKS_DATA = [
     { 
         title: 'Home', 
         links: [
-            { name: 'Home', href: '/' },
+            { name: 'Home', href:'/' },
             { name: 'Contact us', href: '/contact' },
             { name: 'Term of services', href: '/terms' },
             { name: 'About us', href: '/about' },
@@ -32,6 +32,10 @@ const FOOTER_LINKS_DATA = [
 ];
 
 const Footer = () => {
+    const handleScrollToTop = () => {
+        window.scrollTo(0, 0);
+    };
+
     return (
        
         <footer className="relative w-full h-140 flex flex-col justify-end text-white overflow-hidden">
@@ -53,9 +57,10 @@ const Footer = () => {
                
                 <div className="flex justify-center mb-16">
                     <div className="flex items-center space-x-2">
-                         <Link
+     <Link
           href="/"
           className="inline-flex items-center hover:no-underline"
+          onClick={handleScrollToTop}
         >
           <img
             src="/tmovie.png"
@@ -85,6 +90,7 @@ const Footer = () => {
                                         <Link 
                                             href={link.href}
                                             className="text-3xl text-gray-400 hover:text-red-500 transition-colors whitespace-nowrap "
+                                            onClick={handleScrollToTop}
                                         >
                                             {link.name}
                                         </Link>
