@@ -2,11 +2,11 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getTrendingTv, getTopRatedTv, search } from "../../src/api/Api";
-import MovieCard from "../../src/components/MovieCard";
-import Grid from "../../src/components/Grid";
-import Search from "../../src/components/Search";
-import { Movie } from "../../src/types/movie";
+import { getTrendingTv, getTopRatedTv, search } from "../../api/Api";
+import MovieCard from "../../components/MovieCard";
+import Grid from "../../components/Grid";
+import Search from "../../components/Search";
+import { Movie } from "../../types/movie";
 
 function TVPageContent() {
   const searchParams = useSearchParams();

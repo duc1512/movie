@@ -2,9 +2,9 @@
 
 import { useState, useEffect, Suspense } from "react";
 import { useSearchParams } from "next/navigation";
-import { getTrending, getTopRatedMovies, search } from "../../src/api/Api";
-import Grid from "../../src/components/Grid";
-import Search from "../../src/components/Search";
+import { getTrending, getTopRatedMovies, search } from "../../api/Api";
+import Grid from "../../components/Grid";
+import Search from "../../components/Search";
 
 function MoviePageContent() {
   const searchParams = useSearchParams();

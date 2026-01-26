@@ -1,11 +1,11 @@
-import { getTvShowDetails, getTVCredits, getTVVideos, getTVSimilar } from "../../../src/api/Api";
+import { getTvShowDetails, getTVCredits, getTVVideos, getTVSimilar } from "../../../api/Api";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import MovieList from "@/src/components/MovieList";
+import MovieList from "../../../components/MovieList";
 
 interface MovieDetails {
-  id: number;
- name: string;
+  id: number; 
+  name: string;
   overview: string;
   poster_path: string;
   backdrop_path: string;
@@ -57,7 +57,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
         {backdropUrl && (
           <Image
             src={backdropUrl}
-            alt={tvShow.title}
+            alt={tvShow.name}
             fill
             // Tăng độ rõ của ảnh nền
             priority
@@ -79,7 +79,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
               <div className="relative w-85 h-[540px] mt-[-150px] rounded-3xl overflow-hidden shadow-[0_0_50px_rgba(0,0,0,0.8)] border border-white/10">
                 <Image
                   src={posterUrl}
-                  alt={tvShow.title}
+                  alt={tvShow.name}
                   fill
                   className="object-cover"
                 />
@@ -90,7 +90,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
             <div className="text-white mt-[-150px] pt-4 flex-1">
               {/* Xóa sạch drop-shadow ở h1 để Header trông thanh thoát nhất */}
               <h1 className="text-5xl md:text-7xl font-bold mb-8 tracking-tight">
-                {tvShow.title}
+                {tvShow.name}
               </h1>
               {tvShow.genres && (
                 <div className="flex flex-wrap gap-2 mb-12">

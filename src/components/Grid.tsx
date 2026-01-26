@@ -69,7 +69,7 @@ if (keyword) {
       </div>
 
       {/* Nút bấm - chỉ hiển thị khi còn dữ liệu */}
-      {hasMore  && movies.length >=21 && (
+      {hasMore  && movies.length >=20 && (
         <div className="relative py-20 flex justify-center">
           <button
             onClick={loadMoreMovies}

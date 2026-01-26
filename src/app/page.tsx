@@ -1,6 +1,6 @@
-import { getTrending, getTopRatedTv, getTrendingTv, getTopRatedMovies } from "../src/api/Api";
-import Banner from "../src/components/Banner";
-import MovieList from "../src/components/MovieList";
+import { getTrending, getTopRatedTv, getTrendingTv, getTopRatedMovies } from "../api/Api";
+import Banner from "../components/Banner";
+import MovieList from "../components/MovieList";
 
 export default async function Home() {
   const [

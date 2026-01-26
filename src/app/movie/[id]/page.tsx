@@ -1,7 +1,7 @@
-import { getMovieDetails, getMovieCredits, getMovieVideos, getSimilarMovies } from "../../../src/api/Api";
+import { getMovieDetails, getMovieCredits, getMovieVideos, getSimilarMovies } from "../../../api/Api";
 import { notFound } from "next/navigation";
 import Image from "next/image";
-import MovieList from "@/src/components/MovieList";
+import MovieList from "../../../components/MovieList";
 
 interface MovieDetails {
   id: number;
@@ -35,7 +35,7 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
     movie = movieData;
     credits = creditsData;
     videos = videosData;
-    similar=similarMoviesData;
+    similar = similarMoviesData;
   } catch (error) {
     notFound();
   }
@@ -47,8 +47,6 @@ export default async function MoviePage({ params }: { params: Promise<{ id: stri
   const posterUrl = movie.poster_path 
     ? `https://image.tmdb.org/t/p/w500${movie.poster_path}`
     : '/placeholder-poster.jpg';
-
-
 
   return (
     <div className="min-h-screen bg-black relative">
