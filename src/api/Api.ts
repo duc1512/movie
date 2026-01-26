@@ -36,32 +36,20 @@ export async function getTopRatedTv() {
   return fetchFromTMDB("/tv/top_rated");
 }
 
-export async function getTvShowDetails(id: string | number) {
-  return fetchFromTMDB(`/tv/${id}`);
+export async function getDetails(type: "movie" | "tv", id: string | number) {
+  return fetchFromTMDB(`/${type}/${id}`);
 }
 
-export async function getMovieDetails(id: string | number) {
-  return fetchFromTMDB(`/movie/${id}`);
+export async function getCredits(type: "movie" | "tv", id: string | number) {
+  return fetchFromTMDB(`/${type}/${id}/credits`);
 }
 
-export async function getMovieVideos(id: string | number) {
-  return fetchFromTMDB(`/movie/${id}/videos`);
+export async function getSimilar(type: "movie" | "tv", id: string | number){
+  return fetchFromTMDB(`/${type}/${id}/similar`); 
 }
 
-export async function getMovieCredits(id: string | number) {
-  return fetchFromTMDB(`/movie/${id}/credits`);
-}
-export async function getSimilarMovies(id: string | number){
-  return fetchFromTMDB(`/movie/${id}/similar`); 
+export async function getVideos(type: "movie" | "tv", id: string | number) {
+  return fetchFromTMDB(`/${type}/${id}/videos`);
 }
 
-export async function getTVVideos(id: string | number) {
-  return fetchFromTMDB(`/tv/${id}/videos`);
-}
 
-export async function getTVCredits(id: string | number) {
-  return fetchFromTMDB(`/tv/${id}/credits`);
-}
-export async function getTVSimilar(id: string | number){
-  return fetchFromTMDB(`/tv/${id}/similar`); 
-}

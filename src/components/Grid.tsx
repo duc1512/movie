@@ -18,7 +18,7 @@ useEffect(() => {
   if (movies.length < 8) {
     setHasMore(false);
   }
-}, [movies.length]);
+}, [movies]);
   const loadMoreMovies = async () => {
     if (loading || !hasMore) return;
     

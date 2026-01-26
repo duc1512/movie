@@ -2,7 +2,7 @@
 import { Swiper, SwiperSlide } from "swiper/react";
 import { Navigation, Pagination, Autoplay } from "swiper/modules";
 import React, { useState } from "react";
-import { getMovieVideos } from "../api/Api";
+import { getVideos } from "../api/Api";
 import { Movie } from "../types/movie";
 import { motion, AnimatePresence } from "framer-motion"; 
 
@@ -13,7 +13,7 @@ export default function Banner({ movies }: { movies: Movie[] }) {
 
   const handleWatchTrailer = async (id: number) => {
     try {
-      const data = await getMovieVideos(id);
+      const data = await getVideos("movie", id);
       const trailer = data.results.find(
         (v: any) => v.type === "Trailer" && v.site === "YouTube"
       );
