@@ -6,9 +6,11 @@ import { getTrending, getTopRatedMovies, getTrendingTv, getTopRatedTv, search } 
 import Grid from "../../components/Grid";
 import Search from "../../components/Search";
 import { useSearchMovies, useTopRatedMovies, useTopRatedTv, useTrendingMovies, useTrendingTv } from "@/hooks/useMovies";
+import { useLoadingStore } from "@/store/useLoadingStore";
 
 function CategoryPageContent({ params }: { params: Promise<{ type: string }> }) {
   const { type } = use(params);
+  const { setLoading } = useLoadingStore();
 
   if (type !== "movie" && type !== "tv") {
     notFound();
@@ -28,6 +30,18 @@ function CategoryPageContent({ params }: { params: Promise<{ type: string }> }) 
     : type === 'movie' 
       ? trendingMovies.isLoading || topRatedMovies.isLoading
       : trendingTv.isLoading || topRatedTv.isLoading;
+  
+  useEffect(() => {
+    if (isLoading) {
+      if (keyword) {
+        setLoading(true, `Searching for "${keyword}"...`);
+      } else {
+        setLoading(true, `Loading ${displayTitle}...`);
+      }
+    } else {
+      setLoading(false);
+    }
+  }, [isLoading, setLoading, keyword, displayTitle]);
   const data = keyword 
     ? searchResult.data?.results || []
     : type === 'movie'

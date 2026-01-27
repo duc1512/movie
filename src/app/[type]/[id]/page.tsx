@@ -5,9 +5,12 @@ import Image from "next/image";
 import MovieList from "@/components/MovieList";
 import { useDetails,useCredits, useVideos, useSimilar  } from "@/hooks/useMovies";
 import { use } from "react";
+import { useLoadingStore } from "@/store/useLoadingStore";
+import { useEffect } from "react";
 
 export default function DetailPage({ params }: { params: Promise<{ type: string, id: string }> }) {
   const { type, id } = use(params);
+  const { setLoading } = useLoadingStore();
 
   if (type !== "movie" && type !== "tv") notFound();
 
@@ -17,6 +20,14 @@ export default function DetailPage({ params }: { params: Promise<{ type: string,
   const { data: similar, isLoading: similarLoading } = useSimilar(type, id);
     
   const isLoading = detailsLoading || creditsLoading || videosLoading || similarLoading;
+
+  useEffect(() => {
+    if (isLoading) {
+      setLoading(true, 'Loading movie details...');
+    } else {
+      setLoading(false);
+    }
+  }, [isLoading, setLoading]);
 
   if (isLoading) return null;
   if (detailsError || !details) notFound();
